@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.textBox = new System.Windows.Forms.TextBox();
+            this.tbxMain = new System.Windows.Forms.TextBox();
             this.menuStrip = new System.Windows.Forms.MenuStrip();
             this.tsmiFile = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiNew = new System.Windows.Forms.ToolStripMenuItem();
@@ -38,6 +38,7 @@
             this.tsmiSaveAs = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmiExit = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiRageQuit = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiEdit = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiUndo = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
@@ -46,28 +47,29 @@
             this.tsmiPaste = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmiSelectAll = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiFindAndReplace = new System.Windows.Forms.ToolStripMenuItem();
             this.dlgOpenTxtFile = new System.Windows.Forms.OpenFileDialog();
             this.dlgSaveAs = new System.Windows.Forms.SaveFileDialog();
             this.dlgNewFile = new System.Windows.Forms.SaveFileDialog();
-            this.tsmiFindAndReplace = new System.Windows.Forms.ToolStripMenuItem();
             this.pnlFindAndReplace = new System.Windows.Forms.Panel();
-            this.btnClosePnlFindAndReplace = new System.Windows.Forms.Button();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.textBox2 = new System.Windows.Forms.TextBox();
-            this.btnFind = new System.Windows.Forms.Button();
             this.btnReplace = new System.Windows.Forms.Button();
+            this.btnFind = new System.Windows.Forms.Button();
+            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.tbxFind = new System.Windows.Forms.TextBox();
+            this.btnClosePnlFindAndReplace = new System.Windows.Forms.Button();
+            this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.menuStrip.SuspendLayout();
             this.pnlFindAndReplace.SuspendLayout();
             this.SuspendLayout();
             // 
-            // textBox
+            // tbxMain
             // 
-            this.textBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textBox.Location = new System.Drawing.Point(0, 33);
-            this.textBox.Multiline = true;
-            this.textBox.Name = "textBox";
-            this.textBox.Size = new System.Drawing.Size(677, 417);
-            this.textBox.TabIndex = 0;
+            this.tbxMain.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tbxMain.Location = new System.Drawing.Point(0, 33);
+            this.tbxMain.Multiline = true;
+            this.tbxMain.Name = "tbxMain";
+            this.tbxMain.Size = new System.Drawing.Size(677, 417);
+            this.tbxMain.TabIndex = 0;
             // 
             // menuStrip
             // 
@@ -91,7 +93,8 @@
             this.tsmiSave,
             this.tsmiSaveAs,
             this.toolStripSeparator4,
-            this.tsmiExit});
+            this.tsmiExit,
+            this.tsmiRageQuit});
             this.tsmiFile.Name = "tsmiFile";
             this.tsmiFile.Size = new System.Drawing.Size(54, 29);
             this.tsmiFile.Text = "File";
@@ -142,9 +145,18 @@
             // tsmiExit
             // 
             this.tsmiExit.Name = "tsmiExit";
+            this.tsmiExit.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Q)));
             this.tsmiExit.Size = new System.Drawing.Size(283, 34);
             this.tsmiExit.Text = "Exit";
             this.tsmiExit.Click += new System.EventHandler(this.tsmiExit_Click);
+            // 
+            // tsmiRageQuit
+            // 
+            this.tsmiRageQuit.Name = "tsmiRageQuit";
+            this.tsmiRageQuit.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.Q)));
+            this.tsmiRageQuit.Size = new System.Drawing.Size(283, 34);
+            this.tsmiRageQuit.Text = "Rage Quit";
+            this.tsmiRageQuit.Click += new System.EventHandler(this.tsmiRageQuit_Click);
             // 
             // tsmiEdit
             // 
@@ -215,6 +227,14 @@
             this.tsmiSelectAll.Text = "Select All";
             this.tsmiSelectAll.Click += new System.EventHandler(this.tsmiSelectAll_Click);
             // 
+            // tsmiFindAndReplace
+            // 
+            this.tsmiFindAndReplace.Name = "tsmiFindAndReplace";
+            this.tsmiFindAndReplace.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F)));
+            this.tsmiFindAndReplace.Size = new System.Drawing.Size(308, 34);
+            this.tsmiFindAndReplace.Text = "Find and Replace";
+            this.tsmiFindAndReplace.Click += new System.EventHandler(this.tsmiFindAndReplace_Click);
+            // 
             // dlgOpenTxtFile
             // 
             this.dlgOpenTxtFile.Filter = "Text Files|*.txt";
@@ -228,68 +248,62 @@
             this.dlgNewFile.FileName = "New Text File";
             this.dlgNewFile.Filter = "Text File|*.txt";
             // 
-            // tsmiFindAndReplace
-            // 
-            this.tsmiFindAndReplace.Name = "tsmiFindAndReplace";
-            this.tsmiFindAndReplace.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F)));
-            this.tsmiFindAndReplace.Size = new System.Drawing.Size(308, 34);
-            this.tsmiFindAndReplace.Text = "Find and Replace";
-            this.tsmiFindAndReplace.Click += new System.EventHandler(this.tsmiFindAndReplace_Click);
-            // 
             // pnlFindAndReplace
             // 
             this.pnlFindAndReplace.Controls.Add(this.btnReplace);
             this.pnlFindAndReplace.Controls.Add(this.btnFind);
             this.pnlFindAndReplace.Controls.Add(this.textBox2);
-            this.pnlFindAndReplace.Controls.Add(this.textBox1);
+            this.pnlFindAndReplace.Controls.Add(this.tbxFind);
             this.pnlFindAndReplace.Controls.Add(this.btnClosePnlFindAndReplace);
-            this.pnlFindAndReplace.Location = new System.Drawing.Point(276, 132);
+            this.pnlFindAndReplace.Location = new System.Drawing.Point(194, 82);
             this.pnlFindAndReplace.Name = "pnlFindAndReplace";
-            this.pnlFindAndReplace.Size = new System.Drawing.Size(234, 149);
+            this.pnlFindAndReplace.Size = new System.Drawing.Size(342, 191);
             this.pnlFindAndReplace.TabIndex = 2;
             this.pnlFindAndReplace.Visible = false;
             // 
-            // btnClosePnlFindAndReplace
+            // btnReplace
             // 
-            this.btnClosePnlFindAndReplace.Location = new System.Drawing.Point(72, 113);
-            this.btnClosePnlFindAndReplace.Name = "btnClosePnlFindAndReplace";
-            this.btnClosePnlFindAndReplace.Size = new System.Drawing.Size(75, 23);
-            this.btnClosePnlFindAndReplace.TabIndex = 0;
-            this.btnClosePnlFindAndReplace.Text = "Close";
-            this.btnClosePnlFindAndReplace.UseVisualStyleBackColor = true;
-            this.btnClosePnlFindAndReplace.Click += new System.EventHandler(this.btnClosePnlFindAndReplace_Click);
+            this.btnReplace.Location = new System.Drawing.Point(180, 78);
+            this.btnReplace.Name = "btnReplace";
+            this.btnReplace.Size = new System.Drawing.Size(90, 29);
+            this.btnReplace.TabIndex = 4;
+            this.btnReplace.Text = "Replace";
+            this.btnReplace.UseVisualStyleBackColor = true;
+            this.btnReplace.Click += new System.EventHandler(this.btnReplace_Click);
             // 
-            // textBox1
+            // btnFind
             // 
-            this.textBox1.Location = new System.Drawing.Point(18, 23);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(100, 29);
-            this.textBox1.TabIndex = 1;
+            this.btnFind.Location = new System.Drawing.Point(180, 21);
+            this.btnFind.Name = "btnFind";
+            this.btnFind.Size = new System.Drawing.Size(90, 29);
+            this.btnFind.TabIndex = 3;
+            this.btnFind.Text = "Find";
+            this.btnFind.UseVisualStyleBackColor = true;
+            this.btnFind.Click += new System.EventHandler(this.btnFind_Click);
             // 
             // textBox2
             // 
             this.textBox2.Location = new System.Drawing.Point(18, 78);
             this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(100, 29);
+            this.textBox2.Size = new System.Drawing.Size(143, 29);
             this.textBox2.TabIndex = 2;
             // 
-            // btnFind
+            // tbxFind
             // 
-            this.btnFind.Location = new System.Drawing.Point(142, 29);
-            this.btnFind.Name = "btnFind";
-            this.btnFind.Size = new System.Drawing.Size(75, 23);
-            this.btnFind.TabIndex = 3;
-            this.btnFind.Text = "Find";
-            this.btnFind.UseVisualStyleBackColor = true;
+            this.tbxFind.Location = new System.Drawing.Point(18, 23);
+            this.tbxFind.Name = "tbxFind";
+            this.tbxFind.Size = new System.Drawing.Size(143, 29);
+            this.tbxFind.TabIndex = 1;
             // 
-            // btnReplace
+            // btnClosePnlFindAndReplace
             // 
-            this.btnReplace.Location = new System.Drawing.Point(142, 79);
-            this.btnReplace.Name = "btnReplace";
-            this.btnReplace.Size = new System.Drawing.Size(75, 23);
-            this.btnReplace.TabIndex = 4;
-            this.btnReplace.Text = "Replace";
-            this.btnReplace.UseVisualStyleBackColor = true;
+            this.btnClosePnlFindAndReplace.Location = new System.Drawing.Point(124, 141);
+            this.btnClosePnlFindAndReplace.Name = "btnClosePnlFindAndReplace";
+            this.btnClosePnlFindAndReplace.Size = new System.Drawing.Size(75, 29);
+            this.btnClosePnlFindAndReplace.TabIndex = 0;
+            this.btnClosePnlFindAndReplace.Text = "Close";
+            this.btnClosePnlFindAndReplace.UseVisualStyleBackColor = true;
+            this.btnClosePnlFindAndReplace.Click += new System.EventHandler(this.btnClosePnlFindAndReplace_Click);
             // 
             // frmNotepadMinusMinus
             // 
@@ -297,7 +311,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(677, 450);
             this.Controls.Add(this.pnlFindAndReplace);
-            this.Controls.Add(this.textBox);
+            this.Controls.Add(this.tbxMain);
             this.Controls.Add(this.menuStrip);
             this.MainMenuStrip = this.menuStrip;
             this.Name = "frmNotepadMinusMinus";
@@ -313,7 +327,7 @@
 
         #endregion
 
-        private System.Windows.Forms.TextBox textBox;
+        private System.Windows.Forms.TextBox tbxMain;
         private System.Windows.Forms.MenuStrip menuStrip;
         private System.Windows.Forms.ToolStripMenuItem tsmiFile;
         private System.Windows.Forms.ToolStripMenuItem tsmiNew;
@@ -340,7 +354,9 @@
         private System.Windows.Forms.Button btnReplace;
         private System.Windows.Forms.Button btnFind;
         private System.Windows.Forms.TextBox textBox2;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox tbxFind;
+        private System.ComponentModel.BackgroundWorker backgroundWorker1;
+        private System.Windows.Forms.ToolStripMenuItem tsmiRageQuit;
     }
 }
 
