@@ -16,5 +16,15 @@ namespace _20241125w12_image_viewer
         {
             InitializeComponent();
         }
+
+        private void tsmiOpen_Click(object sender, EventArgs e)
+        {
+            if (dlgOpenImage.ShowDialog() == DialogResult.OK)
+            {
+                //pbxMain.Load(dlgOpenImage.FileName);  // Unable to handle .gif
+                Bitmap bmp =  new Bitmap(dlgOpenImage.FileName);  // Read image to Bitmap object
+                pbxMain.Image = bmp;  // Assign Bitmap object to Image property of the PictureBox
+            }
+        }
     }
 }
