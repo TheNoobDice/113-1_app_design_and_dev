@@ -16,7 +16,7 @@ namespace _20241125w12_image_viewer
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new ImageViewer());
+            Application.Run(new frmImageViewer());
         }
     }
 }
