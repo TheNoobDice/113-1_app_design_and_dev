@@ -54,7 +54,7 @@
             this.pnlFindAndReplace = new System.Windows.Forms.Panel();
             this.btnReplace = new System.Windows.Forms.Button();
             this.btnFind = new System.Windows.Forms.Button();
-            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.tbxReplace = new System.Windows.Forms.TextBox();
             this.tbxFind = new System.Windows.Forms.TextBox();
             this.btnClosePnlFindAndReplace = new System.Windows.Forms.Button();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
@@ -70,6 +70,7 @@
             this.tbxMain.Name = "tbxMain";
             this.tbxMain.Size = new System.Drawing.Size(677, 417);
             this.tbxMain.TabIndex = 0;
+            this.tbxMain.TextChanged += new System.EventHandler(this.tbxMain_TextChanged);
             // 
             // menuStrip
             // 
@@ -252,14 +253,16 @@
             // 
             this.pnlFindAndReplace.Controls.Add(this.btnReplace);
             this.pnlFindAndReplace.Controls.Add(this.btnFind);
-            this.pnlFindAndReplace.Controls.Add(this.textBox2);
+            this.pnlFindAndReplace.Controls.Add(this.tbxReplace);
             this.pnlFindAndReplace.Controls.Add(this.tbxFind);
             this.pnlFindAndReplace.Controls.Add(this.btnClosePnlFindAndReplace);
-            this.pnlFindAndReplace.Location = new System.Drawing.Point(194, 82);
+            this.pnlFindAndReplace.Location = new System.Drawing.Point(388, 33);
             this.pnlFindAndReplace.Name = "pnlFindAndReplace";
-            this.pnlFindAndReplace.Size = new System.Drawing.Size(342, 191);
+            this.pnlFindAndReplace.Size = new System.Drawing.Size(289, 191);
             this.pnlFindAndReplace.TabIndex = 2;
             this.pnlFindAndReplace.Visible = false;
+            this.pnlFindAndReplace.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pnlFindAndReplace_MouseDown);
+            this.pnlFindAndReplace.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pnlFindAndReplace_MouseMove);
             // 
             // btnReplace
             // 
@@ -281,12 +284,12 @@
             this.btnFind.UseVisualStyleBackColor = true;
             this.btnFind.Click += new System.EventHandler(this.btnFind_Click);
             // 
-            // textBox2
+            // tbxReplace
             // 
-            this.textBox2.Location = new System.Drawing.Point(18, 78);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(143, 29);
-            this.textBox2.TabIndex = 2;
+            this.tbxReplace.Location = new System.Drawing.Point(18, 78);
+            this.tbxReplace.Name = "tbxReplace";
+            this.tbxReplace.Size = new System.Drawing.Size(143, 29);
+            this.tbxReplace.TabIndex = 2;
             // 
             // tbxFind
             // 
@@ -297,7 +300,7 @@
             // 
             // btnClosePnlFindAndReplace
             // 
-            this.btnClosePnlFindAndReplace.Location = new System.Drawing.Point(124, 141);
+            this.btnClosePnlFindAndReplace.Location = new System.Drawing.Point(111, 131);
             this.btnClosePnlFindAndReplace.Name = "btnClosePnlFindAndReplace";
             this.btnClosePnlFindAndReplace.Size = new System.Drawing.Size(75, 29);
             this.btnClosePnlFindAndReplace.TabIndex = 0;
@@ -353,7 +356,7 @@
         private System.Windows.Forms.Button btnClosePnlFindAndReplace;
         private System.Windows.Forms.Button btnReplace;
         private System.Windows.Forms.Button btnFind;
-        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.TextBox tbxReplace;
         private System.Windows.Forms.TextBox tbxFind;
         private System.ComponentModel.BackgroundWorker backgroundWorker1;
         private System.Windows.Forms.ToolStripMenuItem tsmiRageQuit;

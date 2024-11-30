@@ -17,11 +17,13 @@ namespace _20241021w7_notepad__
     public partial class frmNotepadMinusMinus : Form
     {
         private string openedFilePath;
+        private string lastTextFind;
+        private int lastFoundEndIndex;
 
         private bool saveNecessariness()
         {
             //
-            return false;
+            return true;
         }
 
         private void saveAs()
@@ -77,6 +79,12 @@ namespace _20241021w7_notepad__
             }
             // Call the base class's implementation of OnFormClosing to handle default behavior
             base.OnFormClosing(e);
+        }
+
+        private void tbxMain_TextChanged(object sender, EventArgs e)
+        {
+            lastTextFind = null;
+            lastFoundEndIndex = 0;
         }
 
         private void tsmiNew_Click(object sender, EventArgs e)
@@ -175,24 +183,55 @@ namespace _20241021w7_notepad__
         private void btnFind_Click(object sender, EventArgs e)
         {
             string textToFind = tbxFind.Text;
-            int startIndex = 0;
+            int startIndex;
+            if (textToFind == lastTextFind)
+            {
+                startIndex = lastFoundEndIndex;
+            }
+            else
+            {
+                startIndex = 0;
+            }
             int index = tbxMain.Text.IndexOf(textToFind, startIndex);
 
             if (index >= 0)
             {
                 tbxMain.Select(index, textToFind.Length);  // Highlight the found text
+                lastFoundEndIndex = index + textToFind.Length;
                 tbxMain.Focus(); // Ensure the TextBox has focus, which is necessary for the selection to be visible.
                 tbxMain.ScrollToCaret();  // Scroll the found text
             }
             else
             {
                 MessageBox.Show("Text not found.");
+                lastFoundEndIndex = 0;
             }
+            lastTextFind = textToFind;
         }
 
         private void btnReplace_Click(object sender, EventArgs e)
         {
+            if (tbxMain.SelectedText == tbxFind.Text)
+            {
+                tbxMain.SelectedText = tbxReplace.Text;
+            }
+        }
 
+        private int mouseDownX, mouseDownY;
+
+        private void pnlFindAndReplace_MouseDown(object sender, MouseEventArgs e)
+        {
+            mouseDownX = e.X;
+            mouseDownY = e.Y;
+        }
+
+        private void pnlFindAndReplace_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (e.Button == System.Windows.Forms.MouseButtons.Left)
+            {
+                pnlFindAndReplace.Left += e.X - mouseDownX;
+                pnlFindAndReplace.Top += e.Y - mouseDownY;
+            }
         }
 
         private void btnClosePnlFindAndReplace_Click(object sender, EventArgs e)
