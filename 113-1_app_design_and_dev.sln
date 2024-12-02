@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "20241028w8_database", "2024
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "20241125w12_image_viewer", "20241125w12_image_viewer\20241125w12_image_viewer.csproj", "{FFA42BF2-8039-4F73-A1C5-64FDBB3BDE15}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "20241202w13_paint", "20241202w13_paint\20241202w13_paint.csproj", "{6FCEFD8D-5FB1-4D98-A46E-F821B9BE9E52}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{FFA42BF2-8039-4F73-A1C5-64FDBB3BDE15}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FFA42BF2-8039-4F73-A1C5-64FDBB3BDE15}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FFA42BF2-8039-4F73-A1C5-64FDBB3BDE15}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6FCEFD8D-5FB1-4D98-A46E-F821B9BE9E52}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6FCEFD8D-5FB1-4D98-A46E-F821B9BE9E52}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6FCEFD8D-5FB1-4D98-A46E-F821B9BE9E52}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6FCEFD8D-5FB1-4D98-A46E-F821B9BE9E52}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
