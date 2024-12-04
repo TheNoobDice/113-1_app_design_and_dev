@@ -70,16 +70,13 @@ namespace _20241202w13_paint
 
         private void tsmiOpen_Click(object sender, EventArgs e)
         {
-            string currentFileName = dlgOpenJPG.FileName;
+            if (dlgOpenJPG.ShowDialog() == DialogResult.OK)
+            {
+                string currentFileName = dlgOpenJPG.FileName;
 
-            pbxMain.Load(currentFileName);
-            tsslFileName.Text = currentFileName;
-
-            /*
-            currentZoomLevel = 5;
-            ResizePictureBox();
-            CenterPictureBox();
-            */
+                pbxMain.Load(currentFileName);
+                tsslFileName.Text = currentFileName;
+            }
         }
 
         private void tsmiSaveAs_Click(object sender, EventArgs e)
