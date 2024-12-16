@@ -37,11 +37,20 @@
             this.tsmiZoomIn = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiZoomOut = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiOriginalSize = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsmiRotateClockwise = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiRotate180 = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiRotateAntiClockwise = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsmiFilpHorizontally = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiFilpVertically = new System.Windows.Forms.ToolStripMenuItem();
             this.pbxMain = new System.Windows.Forms.PictureBox();
             this.dlgOpenImage = new System.Windows.Forms.OpenFileDialog();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.tsslFileName = new System.Windows.Forms.ToolStripStatusLabel();
             this.tsslZoomRate = new System.Windows.Forms.ToolStripStatusLabel();
+            this.tsslImageSize = new System.Windows.Forms.ToolStripStatusLabel();
+            this.tsslPictBoxSize = new System.Windows.Forms.ToolStripStatusLabel();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbxMain)).BeginInit();
             this.statusStrip1.SuspendLayout();
@@ -56,7 +65,7 @@
             this.viewToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(800, 36);
+            this.menuStrip1.Size = new System.Drawing.Size(800, 33);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -67,7 +76,7 @@
             this.toolStripSeparator1,
             this.tsmiExit});
             this.tsmiFile.Name = "tsmiFile";
-            this.tsmiFile.Size = new System.Drawing.Size(54, 29);
+            this.tsmiFile.Size = new System.Drawing.Size(54, 32);
             this.tsmiFile.Text = "File";
             // 
             // tsmiOpen
@@ -96,7 +105,14 @@
             this.viewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsmiZoomIn,
             this.tsmiZoomOut,
-            this.tsmiOriginalSize});
+            this.tsmiOriginalSize,
+            this.toolStripSeparator2,
+            this.tsmiRotateClockwise,
+            this.tsmiRotate180,
+            this.tsmiRotateAntiClockwise,
+            this.toolStripSeparator3,
+            this.tsmiFilpHorizontally,
+            this.tsmiFilpVertically});
             this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
             this.viewToolStripMenuItem.Size = new System.Drawing.Size(65, 29);
             this.viewToolStripMenuItem.Text = "View";
@@ -104,16 +120,16 @@
             // tsmiZoomIn
             // 
             this.tsmiZoomIn.Name = "tsmiZoomIn";
-            this.tsmiZoomIn.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Up)));
-            this.tsmiZoomIn.Size = new System.Drawing.Size(295, 34);
+            this.tsmiZoomIn.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.I)));
+            this.tsmiZoomIn.Size = new System.Drawing.Size(343, 34);
             this.tsmiZoomIn.Text = "Zoom In";
             this.tsmiZoomIn.Click += new System.EventHandler(this.tsmiZoomIn_Click);
             // 
             // tsmiZoomOut
             // 
             this.tsmiZoomOut.Name = "tsmiZoomOut";
-            this.tsmiZoomOut.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Down)));
-            this.tsmiZoomOut.Size = new System.Drawing.Size(295, 34);
+            this.tsmiZoomOut.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.P)));
+            this.tsmiZoomOut.Size = new System.Drawing.Size(343, 34);
             this.tsmiZoomOut.Text = "Zoom Out";
             this.tsmiZoomOut.Click += new System.EventHandler(this.tsmiZoomOut_Click);
             // 
@@ -121,9 +137,59 @@
             // 
             this.tsmiOriginalSize.Name = "tsmiOriginalSize";
             this.tsmiOriginalSize.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.D0)));
-            this.tsmiOriginalSize.Size = new System.Drawing.Size(295, 34);
+            this.tsmiOriginalSize.Size = new System.Drawing.Size(366, 34);
             this.tsmiOriginalSize.Text = "Original Size";
             this.tsmiOriginalSize.Click += new System.EventHandler(this.tsmiOriginalSize_Click);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(363, 6);
+            // 
+            // tsmiRotateClockwise
+            // 
+            this.tsmiRotateClockwise.Name = "tsmiRotateClockwise";
+            this.tsmiRotateClockwise.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.L)));
+            this.tsmiRotateClockwise.Size = new System.Drawing.Size(343, 34);
+            this.tsmiRotateClockwise.Text = "Rotate Clockwise";
+            this.tsmiRotateClockwise.Click += new System.EventHandler(this.tsmiRotateClockwise_Click);
+            // 
+            // tsmiRotate180
+            // 
+            this.tsmiRotate180.Name = "tsmiRotate180";
+            this.tsmiRotate180.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.K)));
+            this.tsmiRotate180.Size = new System.Drawing.Size(366, 34);
+            this.tsmiRotate180.Text = "Rotate 180°";
+            this.tsmiRotate180.Click += new System.EventHandler(this.tsmiRotate180_Click);
+            // 
+            // tsmiRotateAntiClockwise
+            // 
+            this.tsmiRotateAntiClockwise.Name = "tsmiRotateAntiClockwise";
+            this.tsmiRotateAntiClockwise.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.J)));
+            this.tsmiRotateAntiClockwise.Size = new System.Drawing.Size(343, 34);
+            this.tsmiRotateAntiClockwise.Text = "Rotate Anti-Clockwise";
+            this.tsmiRotateAntiClockwise.Click += new System.EventHandler(this.tsmiRotateAntiClockwise_Click);
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(363, 6);
+            // 
+            // tsmiFilpHorizontally
+            // 
+            this.tsmiFilpHorizontally.Name = "tsmiFilpHorizontally";
+            this.tsmiFilpHorizontally.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.H)));
+            this.tsmiFilpHorizontally.Size = new System.Drawing.Size(366, 34);
+            this.tsmiFilpHorizontally.Text = "Filp Horizontally";
+            this.tsmiFilpHorizontally.Click += new System.EventHandler(this.tsmiFilpHorizontally_Click);
+            // 
+            // tsmiFilpVertically
+            // 
+            this.tsmiFilpVertically.Name = "tsmiFilpVertically";
+            this.tsmiFilpVertically.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.V)));
+            this.tsmiFilpVertically.Size = new System.Drawing.Size(366, 34);
+            this.tsmiFilpVertically.Text = "Filp Vertically";
+            this.tsmiFilpVertically.Click += new System.EventHandler(this.tsmiFilpVertically_Click);
             // 
             // pbxMain
             // 
@@ -144,7 +210,9 @@
             this.statusStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsslFileName,
-            this.tsslZoomRate});
+            this.tsslZoomRate,
+            this.tsslImageSize,
+            this.tsslPictBoxSize});
             this.statusStrip1.Location = new System.Drawing.Point(0, 418);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(800, 32);
@@ -162,6 +230,22 @@
             this.tsslZoomRate.Name = "tsslZoomRate";
             this.tsslZoomRate.Size = new System.Drawing.Size(100, 25);
             this.tsslZoomRate.Text = "Zoom Rate";
+            // 
+            // tsslImageSize
+            // 
+            this.tsslImageSize.Enabled = false;
+            this.tsslImageSize.Name = "tsslImageSize";
+            this.tsslImageSize.Size = new System.Drawing.Size(98, 25);
+            this.tsslImageSize.Text = "Image Size";
+            this.tsslImageSize.Visible = false;
+            // 
+            // tsslPictBoxSize
+            // 
+            this.tsslPictBoxSize.Enabled = false;
+            this.tsslPictBoxSize.Name = "tsslPictBoxSize";
+            this.tsslPictBoxSize.Size = new System.Drawing.Size(105, 25);
+            this.tsslPictBoxSize.Text = "PictBox Size";
+            this.tsslPictBoxSize.Visible = false;
             // 
             // frmImageViewer
             // 
@@ -201,6 +285,15 @@
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel tsslFileName;
         private System.Windows.Forms.ToolStripStatusLabel tsslZoomRate;
+        private System.Windows.Forms.ToolStripMenuItem tsmiRotateClockwise;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripMenuItem tsmiRotate180;
+        private System.Windows.Forms.ToolStripMenuItem tsmiRotateAntiClockwise;
+        private System.Windows.Forms.ToolStripMenuItem tsmiFilpHorizontally;
+        private System.Windows.Forms.ToolStripMenuItem tsmiFilpVertically;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        private System.Windows.Forms.ToolStripStatusLabel tsslImageSize;
+        private System.Windows.Forms.ToolStripStatusLabel tsslPictBoxSize;
     }
 }
 
