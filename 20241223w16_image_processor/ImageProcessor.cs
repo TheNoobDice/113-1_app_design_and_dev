@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.Windows.Forms;
 
 /* How to copy project and rename it without issues
@@ -315,8 +316,8 @@ namespace _20241223w16_image_processor
         {
             if (dlgSaveImage.ShowDialog() == DialogResult.OK)
             {
-                Bitmap bmpToSave = new Bitmap(dlgSaveImage.FileName);
-                bmpToSave.Save(dlgSaveImage.FileName/*, System.Drawing.Imaging.ImageFormat.Jepg*/);
+                Bitmap bmpToSave = new Bitmap((string)dlgOpenImage.FileName);
+                bmpToSave.Save(dlgSaveImage.FileName, ImageFormat.Png);
 
                 bmpToSave.Dispose();  // Dispose object after saving to release resources
             }
