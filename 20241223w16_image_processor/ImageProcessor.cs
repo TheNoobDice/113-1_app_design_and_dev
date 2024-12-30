@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.IO;
 using System.Windows.Forms;
 
 /* How to copy project and rename it without issues
@@ -50,6 +51,239 @@ namespace _20241223w16_image_processor
         }
 
         //
+        // File Events Definition
+        //
+        private void tsmiOpen_Click(object sender, EventArgs e)
+        {
+            if (dlgOpenImage.ShowDialog() == DialogResult.OK)
+            {
+                string currentFileName = dlgOpenImage.FileName;
+
+                //pbxMain.Load(currentFileName);  // Unable to handle .gif
+
+                bmpOpened = new Bitmap(currentFileName);  // Read image to Bitmap object
+                pbxMain.Image = bmpOpened;  // Assign Bitmap object to Image property of the PictureBox
+                tsslFileName.Text = currentFileName;
+
+                currentZoomLevel = 5;
+                ResizePictureBox();
+            }
+        }
+
+        private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (dlgSaveImage.ShowDialog() == DialogResult.OK)
+            {
+                string filename = dlgSaveImage.FileName;
+                string extension = Path.GetExtension(filename).ToLower();
+
+                try
+                {
+                    using (Bitmap bmpToSave = new Bitmap((string)dlgOpenImage.FileName))
+                    {
+                        ImageFormat format = GetImageFormatFromExtension(extension);
+
+                        if (format != null)
+                        {
+                            bmpToSave.Save(filename, format);
+                            MessageBox.Show("Image saved successfully!");
+                        }
+                        else
+                        {
+                            MessageBox.Show("Unsupported image format: " + extension);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error saving image: " + ex.Message);
+                }
+            }
+        }
+
+        //
+        // View Events Definition
+        //
+        private void tsmiZoomIn_Click(object sender, EventArgs e)
+        {
+            currentZoomLevel++;
+            ResizePictureBox();
+        }
+        private void tsmiZoomOut_Click(object sender, EventArgs e)
+        {
+            currentZoomLevel--;
+            ResizePictureBox();
+        }
+
+        private void tsmiOriginalSize_Click(object sender, EventArgs e)
+        {
+            currentZoomLevel = 5;
+            pbxMain.Width = pbxMain.Image.Width;
+            pbxMain.Height = pbxMain.Image.Height;
+            tsslZoomRate.Text = "100%";
+
+            UpdateTsslSize();
+            CenterPictureBox();
+        }
+
+        private void tsmiRotateClockwise_Click(object sender, EventArgs e)
+        {
+            int original_width = pbxMain.Width;
+            pbxMain.Width = pbxMain.Height;
+            pbxMain.Height = original_width;
+            pbxMain.Image.RotateFlip(RotateFlipType.Rotate90FlipNone);
+
+            UpdateTsslSize();
+            CenterPictureBox();
+            pbxMain.Refresh();
+        }
+
+        private void tsmiRotate180_Click(object sender, EventArgs e)
+        {
+            pbxMain.Image.RotateFlip(RotateFlipType.Rotate180FlipNone);
+
+            UpdateTsslSize();
+            CenterPictureBox();
+            pbxMain.Refresh();
+        }
+
+        private void tsmiRotateAntiClockwise_Click(object sender, EventArgs e)
+        {
+            int original_width = pbxMain.Width;
+            pbxMain.Width = pbxMain.Height;
+            pbxMain.Height = original_width;
+            pbxMain.Image.RotateFlip(RotateFlipType.Rotate270FlipNone);
+
+            UpdateTsslSize();
+            CenterPictureBox();
+            pbxMain.Refresh();
+        }
+
+        //
+        // Filter Events Definition
+        //
+        private void tsmiBrighter_Click(object sender, EventArgs e)
+        {
+            ApplyColorFilter(ColorFilterType.Brighter);
+        }
+
+        private void tsmiDarker_Click(object sender, EventArgs e)
+        {
+            ApplyColorFilter(ColorFilterType.Darker);
+        }
+
+        private void tsmiGrayScale_Click(object sender, EventArgs e)
+        {
+            ApplyColorFilter(ColorFilterType.GrayScale);
+        }
+
+        private void tsmiBlackAndWhiteV1_Click(object sender, EventArgs e)
+        {
+            ApplyColorFilter(ColorFilterType.BlackAndWhite);
+        }
+
+        private void tsmiBlackAndWhiteV2_Click(object sender, EventArgs e)
+        {
+            ApplyColorFilter(ColorFilterType.BlackAndWhiteV2);
+        }
+
+        private void tsmiBlackAndWhiteV3_Click(object sender, EventArgs e)
+        {
+            ApplyColorFilter(ColorFilterType.BlackAndWhiteV3);
+        }
+
+        private void tsmiRedChannel_Click(object sender, EventArgs e)
+        {
+            ApplyColorFilter(ColorFilterType.RedChannel);
+        }
+
+        private void tsmiGreenChannel_Click(object sender, EventArgs e)
+        {
+            ApplyColorFilter(ColorFilterType.GreenChannel);
+        }
+
+        private void tsmiBlueChannel_Click(object sender, EventArgs e)
+        {
+            ApplyColorFilter(ColorFilterType.BlueChannel);
+        }
+
+        private void tsmiInvertColor_Click(object sender, EventArgs e)
+        {
+            ApplyColorFilter(ColorFilterType.Invert);
+        }
+
+        private void tsmiResetFilters_Click(object sender, EventArgs e)
+        {
+            if (bmpOpened != null)
+            {
+                pbxMain.Image = bmpOpened;
+            }
+        }
+
+        //
+        // Processing Event Definition
+        //
+        private void tsmiDownsample2x_Click(object sender, EventArgs e)
+        {
+            if (pbxMain.Image != null)
+            {
+                Bitmap originalImage = (Bitmap)pbxMain.Image;
+                Bitmap downsampledImage = DownsampleImage(originalImage);
+                pbxMain.Image = downsampledImage;
+                ResizePictureBox();
+                pbxMain.Refresh();
+            }
+        }
+
+        private void tsmiUpsample2x_Click(object sender, EventArgs e)
+        {
+            if (pbxMain.Image != null)
+            {
+                Bitmap originalImage = (Bitmap)pbxMain.Image;
+                Bitmap upsampledImage = UpsampleImage(originalImage);
+                pbxMain.Image = upsampledImage;
+                ResizePictureBox();
+                pbxMain.Refresh();
+            }
+        }
+        private void tsmiFilpHorizontally_Click(object sender, EventArgs e)
+        {
+            pbxMain.Image.RotateFlip(RotateFlipType.RotateNoneFlipX);
+            CenterPictureBox();
+            pbxMain.Refresh();
+        }
+
+        private void tsmiFilpVertically_Click(object sender, EventArgs e)
+        {
+            pbxMain.Image.RotateFlip(RotateFlipType.RotateNoneFlipY);
+            CenterPictureBox();
+            pbxMain.Refresh();
+        }
+
+        //
+        // Other Events Definition
+        //
+        private void frmImageProcessor_SizeChanged(object sender, EventArgs e)
+        {
+            CenterPictureBox();
+        }
+
+        private void frmImageProcessor_Click(object sender, EventArgs e)
+        {
+            CenterPictureBox();
+        }
+
+        private void pbxMain_Click(object sender, EventArgs e)
+        {
+            CenterPictureBox();
+        }
+
+        private void tsmiExit_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
+
+        //
         // Functions Definition
         //
         private void UpdateTsslSize()
@@ -65,8 +299,8 @@ namespace _20241223w16_image_processor
         }
 
         private void ResizePictureBox(Bitmap bmpImage = null)
-        {   
-            if (bmpImage == null) {bmpImage = (Bitmap)pbxMain.Image;}
+        {
+            if (bmpImage == null) { bmpImage = (Bitmap)pbxMain.Image; }
 
             if (bmpImage != null)
             {
@@ -93,10 +327,28 @@ namespace _20241223w16_image_processor
             }
         }
 
+        private ImageFormat GetImageFormatFromExtension(string extension)
+        {
+            switch (extension)
+            {
+                case ".png":
+                    return ImageFormat.Png;
+                case ".jpg":
+                case ".jpeg":
+                    return ImageFormat.Jpeg;
+                case ".bmp":
+                    return ImageFormat.Bmp;
+                case ".gif":
+                    return ImageFormat.Gif;
+                default:
+                    return null; // Unsupported format
+            }
+        }
+
         private double CalculateBlockAverageLuminance(Bitmap bmpImage, int startX = 0, int startY = 0, int blockWidth = 0, int blockHeight = 0)
         {
-            if (blockWidth == 0) {blockWidth = bmpImage.Width; }
-            if (blockHeight == 0) {blockHeight = bmpImage.Height;}
+            if (blockWidth == 0) { blockWidth = bmpImage.Width; }
+            if (blockHeight == 0) { blockHeight = bmpImage.Height; }
 
             double totalLuminance = 0;
             int pixelCount = 0;
@@ -290,219 +542,6 @@ namespace _20241223w16_image_processor
         private int Clamp(int value, int min, int max)
         {
             return Math.Max(min, Math.Min(value, max));
-        }
-
-        //
-        // File Events Definition
-        //
-        private void tsmiOpen_Click(object sender, EventArgs e)
-        {
-            if (dlgOpenImage.ShowDialog() == DialogResult.OK)
-            {
-                string currentFileName = dlgOpenImage.FileName;
-
-                //pbxMain.Load(currentFileName);  // Unable to handle .gif
-
-                bmpOpened = new Bitmap(currentFileName);  // Read image to Bitmap object
-                pbxMain.Image = bmpOpened;  // Assign Bitmap object to Image property of the PictureBox
-                tsslFileName.Text = currentFileName;
-
-                currentZoomLevel = 5;
-                ResizePictureBox();
-            }
-        }
-
-        private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (dlgSaveImage.ShowDialog() == DialogResult.OK)
-            {
-                Bitmap bmpToSave = new Bitmap((string)dlgOpenImage.FileName);
-                bmpToSave.Save(dlgSaveImage.FileName, ImageFormat.Png);
-
-                bmpToSave.Dispose();  // Dispose object after saving to release resources
-            }
-        }
-
-        //
-        // View Events Definition
-        //
-        private void tsmiZoomIn_Click(object sender, EventArgs e)
-        {
-            currentZoomLevel++;
-            ResizePictureBox();
-        }
-        private void tsmiZoomOut_Click(object sender, EventArgs e)
-        {
-            currentZoomLevel--;
-            ResizePictureBox();
-        }
-
-        private void tsmiOriginalSize_Click(object sender, EventArgs e)
-        {
-            currentZoomLevel = 5;
-            pbxMain.Width = pbxMain.Image.Width;
-            pbxMain.Height = pbxMain.Image.Height;
-            tsslZoomRate.Text = "100%";
-
-            UpdateTsslSize();
-            CenterPictureBox();
-        }
-
-        private void tsmiRotateClockwise_Click(object sender, EventArgs e)
-        {
-            int original_width = pbxMain.Width;
-            pbxMain.Width = pbxMain.Height;
-            pbxMain.Height = original_width;
-            pbxMain.Image.RotateFlip(RotateFlipType.Rotate90FlipNone);
-
-            UpdateTsslSize();
-            CenterPictureBox();
-            pbxMain.Refresh();
-        }
-
-        private void tsmiRotate180_Click(object sender, EventArgs e)
-        {
-            pbxMain.Image.RotateFlip(RotateFlipType.Rotate180FlipNone);
-
-            UpdateTsslSize();
-            CenterPictureBox();
-            pbxMain.Refresh();
-        }
-
-        private void tsmiRotateAntiClockwise_Click(object sender, EventArgs e)
-        {
-            int original_width = pbxMain.Width;
-            pbxMain.Width = pbxMain.Height;
-            pbxMain.Height = original_width;
-            pbxMain.Image.RotateFlip(RotateFlipType.Rotate270FlipNone);
-
-            UpdateTsslSize();
-            CenterPictureBox();
-            pbxMain.Refresh();
-        }
-
-        //
-        // Filter Events Definition
-        //
-        private void tsmiBrighter_Click(object sender, EventArgs e)
-        {
-            ApplyColorFilter(ColorFilterType.Brighter);
-        }
-
-        private void tsmiDarker_Click(object sender, EventArgs e)
-        {
-            ApplyColorFilter(ColorFilterType.Darker);
-        }
-
-        private void tsmiGrayScale_Click(object sender, EventArgs e)
-        {
-            ApplyColorFilter(ColorFilterType.GrayScale);
-        }
-
-        private void tsmiBlackAndWhiteV1_Click(object sender, EventArgs e)
-        {
-            ApplyColorFilter(ColorFilterType.BlackAndWhite);
-        }
-
-        private void tsmiBlackAndWhiteV2_Click(object sender, EventArgs e)
-        {
-            ApplyColorFilter(ColorFilterType.BlackAndWhiteV2);
-        }
-
-        private void tsmiBlackAndWhiteV3_Click(object sender, EventArgs e)
-        {
-            ApplyColorFilter(ColorFilterType.BlackAndWhiteV3);
-        }
-
-        private void tsmiRedChannel_Click(object sender, EventArgs e)
-        {
-            ApplyColorFilter(ColorFilterType.RedChannel);
-        }
-
-        private void tsmiGreenChannel_Click(object sender, EventArgs e)
-        {
-            ApplyColorFilter(ColorFilterType.GreenChannel);
-        }
-
-        private void tsmiBlueChannel_Click(object sender, EventArgs e)
-        {
-            ApplyColorFilter(ColorFilterType.BlueChannel);
-        }
-
-        private void tsmiInvertColor_Click(object sender, EventArgs e)
-        {
-            ApplyColorFilter(ColorFilterType.Invert);
-        }
-
-        private void tsmiResetFilters_Click(object sender, EventArgs e)
-        {
-            if (bmpOpened != null)
-            {
-                pbxMain.Image = bmpOpened;
-            }
-        }
-
-        //
-        // Processing Event Definition
-        //
-        private void tsmiDownsample2x_Click(object sender, EventArgs e)
-        {
-            if (pbxMain.Image != null)
-            {
-                Bitmap originalImage = (Bitmap)pbxMain.Image;
-                Bitmap downsampledImage = DownsampleImage(originalImage);
-                pbxMain.Image = downsampledImage;
-                ResizePictureBox();
-                pbxMain.Refresh();
-            }
-        }
-
-        private void tsmiUpsample2x_Click(object sender, EventArgs e)
-        {
-            if (pbxMain.Image != null)
-            {
-                Bitmap originalImage = (Bitmap)pbxMain.Image;
-                Bitmap upsampledImage = UpsampleImage(originalImage);
-                pbxMain.Image = upsampledImage;
-                ResizePictureBox();
-                pbxMain.Refresh();
-            }
-        }
-        private void tsmiFilpHorizontally_Click(object sender, EventArgs e)
-        {
-            pbxMain.Image.RotateFlip(RotateFlipType.RotateNoneFlipX);
-            CenterPictureBox();
-            pbxMain.Refresh();
-        }
-
-        private void tsmiFilpVertically_Click(object sender, EventArgs e)
-        {
-            pbxMain.Image.RotateFlip(RotateFlipType.RotateNoneFlipY);
-            CenterPictureBox();
-            pbxMain.Refresh();
-        }
-
-        //
-        // Other Events Definition
-        //
-        private void frmImageProcessor_SizeChanged(object sender, EventArgs e)
-        {
-            CenterPictureBox();
-        }
-
-        private void frmImageProcessor_Click(object sender, EventArgs e)
-        {
-            CenterPictureBox();
-        }
-
-        private void pbxMain_Click(object sender, EventArgs e)
-        {
-            CenterPictureBox();
-        }
-
-        private void tsmiExit_Click(object sender, EventArgs e)
-        {
-            Application.Exit();
         }
     }
 }
