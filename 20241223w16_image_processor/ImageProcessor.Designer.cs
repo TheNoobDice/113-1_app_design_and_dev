@@ -36,6 +36,7 @@
             this.tsmiExit = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiView = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiZoomIn = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiZoomOut = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiOriginalSize = new System.Windows.Forms.ToolStripMenuItem();
             this.tssViewRotate = new System.Windows.Forms.ToolStripSeparator();
             this.tsmiRotateClockwise = new System.Windows.Forms.ToolStripMenuItem();
@@ -47,6 +48,9 @@
             this.tssFilter = new System.Windows.Forms.ToolStripSeparator();
             this.tsmiGrayScale = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiBlackAndWhite = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiBlackAndWhiteV1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiBlackAndWhiteV2 = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiBlackAndWhiteV3 = new System.Windows.Forms.ToolStripMenuItem();
             this.tssFilterChannels = new System.Windows.Forms.ToolStripSeparator();
             this.tsmiRedChannel = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiGreenChannel = new System.Windows.Forms.ToolStripMenuItem();
@@ -69,7 +73,6 @@
             this.tsslImageSize = new System.Windows.Forms.ToolStripStatusLabel();
             this.tsslPictBoxSize = new System.Windows.Forms.ToolStripStatusLabel();
             this.dlgSaveImage = new System.Windows.Forms.SaveFileDialog();
-            this.tsmiZoomOut = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbxMain)).BeginInit();
             this.statusStrip1.SuspendLayout();
@@ -105,7 +108,7 @@
             // 
             this.tsmiOpen.Name = "tsmiOpen";
             this.tsmiOpen.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-            this.tsmiOpen.Size = new System.Drawing.Size(270, 34);
+            this.tsmiOpen.Size = new System.Drawing.Size(237, 34);
             this.tsmiOpen.Text = "Open";
             this.tsmiOpen.Click += new System.EventHandler(this.tsmiOpen_Click);
             // 
@@ -113,20 +116,20 @@
             // 
             this.tsmiSaveAs.Name = "tsmiSaveAs";
             this.tsmiSaveAs.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
-            this.tsmiSaveAs.Size = new System.Drawing.Size(270, 34);
+            this.tsmiSaveAs.Size = new System.Drawing.Size(237, 34);
             this.tsmiSaveAs.Text = "Save As";
             this.tsmiSaveAs.Click += new System.EventHandler(this.saveAsToolStripMenuItem_Click);
             // 
             // tssFileExit
             // 
             this.tssFileExit.Name = "tssFileExit";
-            this.tssFileExit.Size = new System.Drawing.Size(267, 6);
+            this.tssFileExit.Size = new System.Drawing.Size(234, 6);
             // 
             // tsmiExit
             // 
             this.tsmiExit.Name = "tsmiExit";
             this.tsmiExit.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Q)));
-            this.tsmiExit.Size = new System.Drawing.Size(270, 34);
+            this.tsmiExit.Size = new System.Drawing.Size(237, 34);
             this.tsmiExit.Text = "Exit";
             this.tsmiExit.Click += new System.EventHandler(this.tsmiExit_Click);
             // 
@@ -151,6 +154,14 @@
             this.tsmiZoomIn.Size = new System.Drawing.Size(343, 34);
             this.tsmiZoomIn.Text = "Zoom In";
             this.tsmiZoomIn.Click += new System.EventHandler(this.tsmiZoomIn_Click);
+            // 
+            // tsmiZoomOut
+            // 
+            this.tsmiZoomOut.Name = "tsmiZoomOut";
+            this.tsmiZoomOut.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.U)));
+            this.tsmiZoomOut.Size = new System.Drawing.Size(343, 34);
+            this.tsmiZoomOut.Text = "Zoom Out";
+            this.tsmiZoomOut.Click += new System.EventHandler(this.tsmiZoomOut_Click);
             // 
             // tsmiOriginalSize
             // 
@@ -240,11 +251,39 @@
             // 
             // tsmiBlackAndWhite
             // 
+            this.tsmiBlackAndWhite.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsmiBlackAndWhiteV1,
+            this.tsmiBlackAndWhiteV2,
+            this.tsmiBlackAndWhiteV3});
             this.tsmiBlackAndWhite.Name = "tsmiBlackAndWhite";
-            this.tsmiBlackAndWhite.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.D4)));
             this.tsmiBlackAndWhite.Size = new System.Drawing.Size(284, 34);
             this.tsmiBlackAndWhite.Text = "Black && White";
-            this.tsmiBlackAndWhite.Click += new System.EventHandler(this.tsmiBlackAndWhite_Click);
+            // 
+            // tsmiBlackAndWhiteV1
+            // 
+            this.tsmiBlackAndWhiteV1.Name = "tsmiBlackAndWhiteV1";
+            this.tsmiBlackAndWhiteV1.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.D4)));
+            this.tsmiBlackAndWhiteV1.Size = new System.Drawing.Size(354, 34);
+            this.tsmiBlackAndWhiteV1.Text = "Black && White V1";
+            this.tsmiBlackAndWhiteV1.Click += new System.EventHandler(this.tsmiBlackAndWhiteV1_Click);
+            // 
+            // tsmiBlackAndWhiteV2
+            // 
+            this.tsmiBlackAndWhiteV2.Name = "tsmiBlackAndWhiteV2";
+            this.tsmiBlackAndWhiteV2.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.Shift) 
+            | System.Windows.Forms.Keys.D4)));
+            this.tsmiBlackAndWhiteV2.Size = new System.Drawing.Size(354, 34);
+            this.tsmiBlackAndWhiteV2.Text = "Black && White V2";
+            this.tsmiBlackAndWhiteV2.Click += new System.EventHandler(this.tsmiBlackAndWhiteV2_Click);
+            // 
+            // tsmiBlackAndWhiteV3
+            // 
+            this.tsmiBlackAndWhiteV3.Name = "tsmiBlackAndWhiteV3";
+            this.tsmiBlackAndWhiteV3.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Alt) 
+            | System.Windows.Forms.Keys.D4)));
+            this.tsmiBlackAndWhiteV3.Size = new System.Drawing.Size(354, 34);
+            this.tsmiBlackAndWhiteV3.Text = "Black && White V3";
+            this.tsmiBlackAndWhiteV3.Click += new System.EventHandler(this.tsmiBlackAndWhiteV3_Click);
             // 
             // tssFilterChannels
             // 
@@ -393,32 +432,20 @@
             // 
             // tsslImageSize
             // 
-            this.tsslImageSize.Enabled = false;
             this.tsslImageSize.Name = "tsslImageSize";
             this.tsslImageSize.Size = new System.Drawing.Size(98, 25);
             this.tsslImageSize.Text = "Image Size";
-            this.tsslImageSize.Visible = false;
             // 
             // tsslPictBoxSize
             // 
-            this.tsslPictBoxSize.Enabled = false;
             this.tsslPictBoxSize.Name = "tsslPictBoxSize";
             this.tsslPictBoxSize.Size = new System.Drawing.Size(105, 25);
             this.tsslPictBoxSize.Text = "PictBox Size";
-            this.tsslPictBoxSize.Visible = false;
             // 
             // dlgSaveImage
             // 
             this.dlgSaveImage.Filter = "Image Files|*.bmp;*.png;*.jpg;*.jpeg;*.gif";
             this.dlgSaveImage.Title = "How do you want to save your image?";
-            // 
-            // tsmiZoomOut
-            // 
-            this.tsmiZoomOut.Name = "tsmiZoomOut";
-            this.tsmiZoomOut.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.U)));
-            this.tsmiZoomOut.Size = new System.Drawing.Size(343, 34);
-            this.tsmiZoomOut.Text = "Zoom Out";
-            this.tsmiZoomOut.Click += new System.EventHandler(this.tsmiZoomOut_Click);
             // 
             // frmImageProcessor
             // 
@@ -431,7 +458,7 @@
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "frmImageProcessor";
             this.Text = "Image Processor";
-            this.ResizeEnd += new System.EventHandler(this.frmImageViewer_ResizeEnd);
+            this.SizeChanged += new System.EventHandler(this.frmImageProcessor_SizeChanged);
             this.Click += new System.EventHandler(this.frmImageProcessor_Click);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
@@ -487,6 +514,9 @@
         private System.Windows.Forms.ToolStripSeparator tssFilterReset;
         private System.Windows.Forms.ToolStripMenuItem tsmiResetFilters;
         private System.Windows.Forms.ToolStripMenuItem tsmiZoomOut;
+        private System.Windows.Forms.ToolStripMenuItem tsmiBlackAndWhiteV2;
+        private System.Windows.Forms.ToolStripMenuItem tsmiBlackAndWhiteV1;
+        private System.Windows.Forms.ToolStripMenuItem tsmiBlackAndWhiteV3;
     }
 }
 

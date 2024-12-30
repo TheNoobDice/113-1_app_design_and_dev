@@ -1,11 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 /* How to copy project and rename it without issues
@@ -23,18 +18,17 @@ namespace _20241223w16_image_processor
 {
     public partial class frmImageProcessor : Form
     {
-        // Note: tsslImageSize and tsslPictBoxSize's .Visible and .Enabled properties is set to False
-
         public frmImageProcessor()
         {
             InitializeComponent();
+            menuStrip1.BringToFront();
         }
 
         //
         // Variables Definition 
         //
         private List<int> zoomPercents = new List<int> {10, 25, 50, 75, 90, 100, 110, 125, 150, 175, 200, 250, 300, 400, 500, 750, 1000};
-        private int currentZoomLevel = 5;  // Initial zoom level
+        private int currentZoomLevel = 5;  // Initial zoom level: 100%
         //private bool aspect_rotated = false;
 
         Bitmap bmpOpened;
@@ -44,6 +38,8 @@ namespace _20241223w16_image_processor
         {
             GrayScale,
             BlackAndWhite,
+            BlackAndWhiteV2,
+            BlackAndWhiteV3,
             Invert,
             RedChannel,
             GreenChannel,
@@ -55,15 +51,23 @@ namespace _20241223w16_image_processor
         //
         // Functions Definition
         //
+        private void UpdateTsslSize()
+        {
+            tsslImageSize.Text = "Image:" + pbxMain.Image.Width + "x" + pbxMain.Image.Height;
+            tsslPictBoxSize.Text = "PictBox:" + pbxMain.Width + "x" + pbxMain.Height;
+        }
+
         private void CenterPictureBox()
         {
             pbxMain.Left = (this.ClientSize.Width - pbxMain.Width) / 2;
             pbxMain.Top = (this.ClientSize.Height - pbxMain.Height) / 2;
         }
 
-        private void ResizePictureBox()
-        {
-            if (pbxMain.Image != null)
+        private void ResizePictureBox(Bitmap bmpImage = null)
+        {   
+            if (bmpImage == null) {bmpImage = (Bitmap)pbxMain.Image;}
+
+            if (bmpImage != null)
             {
                 if (currentZoomLevel < 0)
                 {
@@ -76,24 +80,37 @@ namespace _20241223w16_image_processor
 
                 int zoomPercent = zoomPercents[currentZoomLevel];
 
-                // Set the new size of the PictureBox
-                /*if (aspect_rotated)
-                {
-                    pbxMain.Width = (int)(pbxMain.Image.Height * zoomPercent / 100);
-                    pbxMain.Height = (int)(pbxMain.Image.Width * zoomPercent / 100);
-                }
-                else
-                {*/
-                    pbxMain.Width = (int)(pbxMain.Image.Width * zoomPercent / 100);
-                    pbxMain.Height = (int)(pbxMain.Image.Height * zoomPercent / 100);
-                //}
+                pbxMain.Width = (int)(bmpImage.Width * zoomPercent / 100);
+                pbxMain.Height = (int)(bmpImage.Height * zoomPercent / 100);
                 tsslZoomRate.Text = zoomPercent + "%";
 
                 // Maintain aspect ratio and center the image
                 pbxMain.SizeMode = PictureBoxSizeMode.Zoom;
 
+                UpdateTsslSize();
                 CenterPictureBox();
             }
+        }
+
+        private double CalculateBlockAverageLuminance(Bitmap bmpImage, int startX = 0, int startY = 0, int blockWidth = 0, int blockHeight = 0)
+        {
+            if (blockWidth == 0) {blockWidth = bmpImage.Width; }
+            if (blockHeight == 0) {blockHeight = bmpImage.Height;}
+
+            double totalLuminance = 0;
+            int pixelCount = 0;
+
+            for (int y = startY; y < startY + blockHeight && y < bmpImage.Height; y++)
+            {
+                for (int x = startX; x < startX + blockWidth && x < bmpImage.Width; x++)
+                {
+                    Color pixelColor = bmpImage.GetPixel(x, y);
+                    totalLuminance += (0.299 * pixelColor.R + 0.587 * pixelColor.G + 0.114 * pixelColor.B);
+                    pixelCount++;
+                }
+            }
+
+            return pixelCount > 0 ? totalLuminance / pixelCount : 0;
         }
 
         // Handles All Color Filter Events
@@ -103,58 +120,104 @@ namespace _20241223w16_image_processor
             {
                 Bitmap filteredImage = new Bitmap(bmpOpened.Width, bmpOpened.Height);
 
-                for (int x = 0; x < bmpOpened.Width; x++)
+                // Initialize variables, ensures that they always have a defined value.
+                // to avoid compile scold "Use of unassigned local variable 'threshold'" error to you
+                double threshold = 128;
+
+                // BlackAndWhiteV2: threshold = average luminance of the image
+                if (colorFilterType == ColorFilterType.BlackAndWhiteV2)
                 {
-                    for (int y = 0; y < bmpOpened.Height; y++)
+                    threshold = CalculateBlockAverageLuminance(bmpOpened);
+                }
+
+                // BlackAndWhiteV3: threshold = average luminance for each 40x40 block
+                if (colorFilterType == ColorFilterType.BlackAndWhiteV3)
+                {
+                    int blockWidth = 40;
+                    int blockHeight = 40;
+
+                    for (int y = 0; y < bmpOpened.Height; y += blockHeight)
                     {
-                        Color clrOrigin = bmpOpened.GetPixel(x, y);
-                        // Initialize variables, ensures that they always have a defined value.
-                        int red = clrOrigin.R, green = clrOrigin.G, blue = clrOrigin.B;
-                        byte luminance = (byte)(0.299 * red + 0.587 * green + 0.114 * blue);
-
-                        switch (colorFilterType)
+                        for (int x = 0; x < bmpOpened.Width; x += blockWidth)
                         {
-                            case ColorFilterType.GrayScale:
-                                // Formula based on the relative luminance of human perception for red, green, and blue.
-                                // The coefficients (0.299, 0.587, and 0.114) represent the relative importance of each color channel to human perception of brightness.
-                                red = green = blue = luminance;
-                                break;
-                            case ColorFilterType.BlackAndWhite:
-                                byte threshold = 128;
-                                red = green = blue = luminance >= threshold ? (byte)255 : (byte)0;
-                                break;
-                            case ColorFilterType.Invert:
-                                red = (byte)(255 - red);
-                                green = (byte)(255 - green);
-                                blue = (byte)(255 - blue);
-                                break;
-                            case ColorFilterType.RedChannel:
-                                green = blue = 0;
-                                break;
-                            case ColorFilterType.GreenChannel:
-                                red = blue = 0;
-                                break;
-                            case ColorFilterType.BlueChannel:
-                                red = green = 0;
-                                break;
-                            case ColorFilterType.Brighter:
-                                red += 32;
-                                green += 32;
-                                blue += 32;
-                                break;
-                            case ColorFilterType.Darker:
-                                red -= 32;
-                                green -= 32;
-                                blue -= 32;
-                                break;
+                            // Calculate average luminance for the current block
+                            double blockAvgLuminance = CalculateBlockAverageLuminance(bmpOpened, x, y, blockWidth, blockHeight);
+
+                            // Process pixels within the block
+                            for (int j = y; j < Math.Min(y + blockHeight, bmpOpened.Height); j++)
+                            {
+                                for (int i = x; i < Math.Min(x + blockHeight, bmpOpened.Width); i++)
+                                {
+                                    Color clrOrigin = bmpOpened.GetPixel(i, j);
+                                    double luminance = 0.299 * clrOrigin.R + 0.587 * clrOrigin.G + 0.114 * clrOrigin.B;
+
+                                    threshold = (byte)blockAvgLuminance;
+                                    luminance = luminance >= threshold ? 255 : 0;
+
+                                    filteredImage.SetPixel(i, j, Color.FromArgb(clrOrigin.A, (byte)luminance, (byte)luminance, (byte)luminance));
+                                }
+                            }
                         }
+                    }
+                }
+                else
+                {
+                    for (int x = 0; x < bmpOpened.Width; x++)
+                    {
+                        for (int y = 0; y < bmpOpened.Height; y++)
+                        {
+                            Color clrOrigin = bmpOpened.GetPixel(x, y);
 
-                        red = Clamp(red, 0, 255);
-                        green = Clamp(green, 0, 255);
-                        blue = Clamp(blue, 0, 255);
+                            // Initialize variables, ensures that they always have a defined value.
+                            // to avoid compile scold "Use of unassigned local variable '[variable]'" error to you
+                            int red = clrOrigin.R, green = clrOrigin.G, blue = clrOrigin.B;
 
-                        Color filteredColor = Color.FromArgb(clrOrigin.A, red, green, blue);
-                        filteredImage.SetPixel(x, y, filteredColor);
+                            // Formula based on the relative luminance of human perception for red, green, and blue.
+                            // The coefficients (0.299, 0.587, and 0.114) represent the relative importance of each color channel to human perception of brightness.
+                            double luminance = 0.299 * red + 0.587 * green + 0.114 * blue;
+
+                            switch (colorFilterType)
+                            {
+                                case ColorFilterType.GrayScale:
+                                    red = green = blue = (byte)luminance;
+                                    break;
+                                case ColorFilterType.BlackAndWhite:
+                                case ColorFilterType.BlackAndWhiteV2:
+                                    red = green = blue = luminance >= threshold ? (byte)255 : (byte)0;
+                                    break;
+                                case ColorFilterType.Invert:
+                                    red = (byte)(255 - red);
+                                    green = (byte)(255 - green);
+                                    blue = (byte)(255 - blue);
+                                    break;
+                                case ColorFilterType.RedChannel:
+                                    green = blue = 0;
+                                    break;
+                                case ColorFilterType.GreenChannel:
+                                    red = blue = 0;
+                                    break;
+                                case ColorFilterType.BlueChannel:
+                                    red = green = 0;
+                                    break;
+                                case ColorFilterType.Brighter:
+                                    red += 32;
+                                    green += 32;
+                                    blue += 32;
+                                    break;
+                                case ColorFilterType.Darker:
+                                    red -= 32;
+                                    green -= 32;
+                                    blue -= 32;
+                                    break;
+                            }
+
+                            red = Clamp(red, 0, 255);
+                            green = Clamp(green, 0, 255);
+                            blue = Clamp(blue, 0, 255);
+
+                            Color filteredColor = Color.FromArgb(clrOrigin.A, red, green, blue);
+                            filteredImage.SetPixel(x, y, filteredColor);
+                        }
                     }
                 }
 
@@ -279,6 +342,8 @@ namespace _20241223w16_image_processor
             pbxMain.Width = pbxMain.Image.Width;
             pbxMain.Height = pbxMain.Image.Height;
             tsslZoomRate.Text = "100%";
+
+            UpdateTsslSize();
             CenterPictureBox();
         }
 
@@ -288,15 +353,17 @@ namespace _20241223w16_image_processor
             pbxMain.Width = pbxMain.Height;
             pbxMain.Height = original_width;
             pbxMain.Image.RotateFlip(RotateFlipType.Rotate90FlipNone);
+
+            UpdateTsslSize();
             CenterPictureBox();
             pbxMain.Refresh();
-            //tsslImageSize.Text = "Image:" + pbxMain.Image.Width + ", " + pbxMain.Image.Height;
-            //tsslPictBoxSize.Text = "PictBox:" + pbxMain.Width + ", " + pbxMain.Height;
         }
 
         private void tsmiRotate180_Click(object sender, EventArgs e)
         {
             pbxMain.Image.RotateFlip(RotateFlipType.Rotate180FlipNone);
+
+            UpdateTsslSize();
             CenterPictureBox();
             pbxMain.Refresh();
         }
@@ -307,6 +374,8 @@ namespace _20241223w16_image_processor
             pbxMain.Width = pbxMain.Height;
             pbxMain.Height = original_width;
             pbxMain.Image.RotateFlip(RotateFlipType.Rotate270FlipNone);
+
+            UpdateTsslSize();
             CenterPictureBox();
             pbxMain.Refresh();
         }
@@ -329,9 +398,19 @@ namespace _20241223w16_image_processor
             ApplyColorFilter(ColorFilterType.GrayScale);
         }
 
-        private void tsmiBlackAndWhite_Click(object sender, EventArgs e)
+        private void tsmiBlackAndWhiteV1_Click(object sender, EventArgs e)
         {
             ApplyColorFilter(ColorFilterType.BlackAndWhite);
+        }
+
+        private void tsmiBlackAndWhiteV2_Click(object sender, EventArgs e)
+        {
+            ApplyColorFilter(ColorFilterType.BlackAndWhiteV2);
+        }
+
+        private void tsmiBlackAndWhiteV3_Click(object sender, EventArgs e)
+        {
+            ApplyColorFilter(ColorFilterType.BlackAndWhiteV3);
         }
 
         private void tsmiRedChannel_Click(object sender, EventArgs e)
@@ -405,17 +484,17 @@ namespace _20241223w16_image_processor
         //
         // Other Events Definition
         //
+        private void frmImageProcessor_SizeChanged(object sender, EventArgs e)
+        {
+            CenterPictureBox();
+        }
+
         private void frmImageProcessor_Click(object sender, EventArgs e)
         {
             CenterPictureBox();
         }
 
         private void pbxMain_Click(object sender, EventArgs e)
-        {
-            CenterPictureBox();
-        }
-
-        private void frmImageViewer_ResizeEnd(object sender, EventArgs e)
         {
             CenterPictureBox();
         }
