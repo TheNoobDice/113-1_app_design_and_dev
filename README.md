@@ -1,1 +1,1 @@
-Note the database project is incomplele
+Note the database project is incomplete
